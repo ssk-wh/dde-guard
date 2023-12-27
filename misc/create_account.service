@@ -1,4 +1,0 @@
-[Conf]
-policy_action=org.deepin.dde.ControlCenter.CreateAccount
-check=/usr/bin/check_desktop.bash
-repair=pkexec /usr/bin/delete_user.sh

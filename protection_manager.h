@@ -1,5 +1,5 @@
-#ifndef RECORDER_H
-#define RECORDER_H
+#ifndef PROTECTION_MANAGER_H
+#define PROTECTION_MANAGER_H
 #include <QStringList>
 
 struct Service {
@@ -11,28 +11,28 @@ struct Service {
 using ServiceMap = QMap<QString, Service>;
 
 
-struct Conf{
+struct Protection{
     QString name;
     QStringList args;
 };
 
-using Confs = QList<Conf>;
+using Protections = QList<Protection>;
 
-class Recorder
+class ProtectionManager
 {
 public:
-    ~ Recorder();
+    ~ ProtectionManager();
 
-    static Recorder *instance();
+    static ProtectionManager *instance();
 
     static void loadServices(ServiceMap &map);
-    static void loadConfs(Confs &confs);
+    static void loadProtections(Protections &ops);
 
     static void add(const QString &name, const QStringList &args);
     static void remove(const QString &name);
 
 private:
-    explicit Recorder();
+    explicit ProtectionManager();
 };
 
-#endif // RECORDER_H
+#endif // PROTECTION_MANAGER_H

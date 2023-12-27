@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.deepin.dde.TransactionProtect
+Exec=/usr/bin/dde-transactionprotect
+SystemdService=org.deepin.dde.TransactionProtect.service

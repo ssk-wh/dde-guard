@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.deepin.dde.Guard
-Exec=/usr/bin/dde-guard

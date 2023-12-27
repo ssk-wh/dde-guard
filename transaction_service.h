@@ -1,17 +1,19 @@
-#ifndef GUARD_H
-#define GUARD_H
+#ifndef TRANSACTION_SERVICE_H
+#define TRANSACTION_SERVICE_H
 
 #include <QObject>
 #include <QDBusContext>
 #include <QFutureWatcher>
 
-class Guard : public QObject, public QDBusContext
+#include "protection_manager.h"
+
+class TransactionService : public QObject, public QDBusContext
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.deepin.dde.Guard")
+    Q_CLASSINFO("D-Bus Interface", "org.deepin.dde.TransactionProtect")
 
 public:
-    explicit Guard(QObject *parent = nullptr);
+    explicit TransactionService(QObject *parent = nullptr);
 
 public Q_SLOTS:
     void add(const QString &operation, const QStringList &args);
@@ -26,6 +28,8 @@ private:
 private:
     using WatcherList = QList<QFutureWatcher<void> *>;
     WatcherList m_watchers;
+
+    ServiceMap m_serciceMap;
 };
 
-#endif // GUARD_H
+#endif // TRANSACTION_SERVICE_H

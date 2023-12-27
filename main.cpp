@@ -1,4 +1,4 @@
-#include "guard.h"
+#include "transaction_service.h"
 
 #include <QCoreApplication>
 #include <QDBusConnection>
@@ -8,14 +8,14 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    if (!QDBusConnection::sessionBus().registerService("org.deepin.dde.Guard")) {
-        qWarning() << "Failed to register dbus service, error:" << QDBusConnection::sessionBus().lastError().message();
+    if (!QDBusConnection::systemBus().registerService("org.deepin.dde.TransactionProtect")) {
+        qWarning() << "Failed to register dbus service, error:" << QDBusConnection::systemBus().lastError().message();
         exit(-1);
     }
 
-    Guard d;
-    if (!QDBusConnection::sessionBus().registerObject("/org/deepin/dde/Guard", &d, QDBusConnection::ExportAllSlots)) {
-        qWarning() << "Failed to register dbus object, error:" << QDBusConnection::sessionBus().lastError().name();
+    TransactionService d;
+    if (!QDBusConnection::systemBus().registerObject("/org/deepin/dde/TransactionProtect", &d, QDBusConnection::ExportAllSlots)) {
+        qWarning() << "Failed to register dbus object, error:" << QDBusConnection::systemBus().lastError().name();
         exit(-1);
     }
 

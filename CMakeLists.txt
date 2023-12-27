@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(dde-guard)
+set(BIN_NAME dde-transactionprotect)
+
+project(${BIN_NAME})
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -17,14 +19,14 @@ find_package(Qt5Concurrent REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(PolkitQt5-1)
 
-add_executable(${PROJECT_NAME}
+add_executable(${BIN_NAME}
     "main.cpp"
-    "guard.h"
-    "guard.cpp"
-    "recorder.h"
-    "recorder.cpp")
+    "transaction_service.h"
+    "transaction_service.cpp"
+    "protection_manager.h"
+    "protection_manager.cpp")
 
-target_include_directories(dde-guard PUBLIC
+target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
     ${Qt5DBus_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
@@ -32,7 +34,7 @@ target_include_directories(dde-guard PUBLIC
     ${OBJECT_BINARY_DIR}
     )
 
-target_link_libraries(dde-guard
+target_link_libraries(${BIN_NAME}
     ${DtkWidget_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
@@ -41,37 +43,24 @@ target_link_libraries(dde-guard
     PolkitQt5-1::Agent
     )
 
-# Install settings
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+#if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
+#endif ()
 
-install(FILES misc/org.deepin.dde.Guard.service
-    DESTINATION lib/systemd/user/
-)
+# bin
+install(TARGETS ${BIN_NAME} DESTINATION bin/)
 
-install(FILES misc/dbus/org.deepin.dde.Guard.service
+# systemd service
+install(FILES misc/systemd/org.deepin.dde.TransactionProtect.service
+    DESTINATION lib/systemd/system/
+    )
+
+# dbus service
+install(FILES misc/dbus/org.deepin.dde.TransactionProtect.service
     DESTINATION share/dbus-1/services/
-)
+    )
 
-# TODO 以下内容为调试使用
-
-# 模拟应用安装的服务文件
-install(FILES misc/create_account.service
-    DESTINATION /var/lib/deepin/dde-guard/services/
-)
-
-# 模拟应用安装的policy文件，用于操作时提权
-install(FILES misc/org.deepin.dde.guard.delete_user.policy
-    DESTINATION share/polkit-1/actions/
-)
-
-# 模拟应用安装的check脚本
-install(FILES misc/check_desktop.sh
-    DESTINATION bin/
-)
-
-# 模拟应用安装的repair脚本,注意，脚本需要有可执行权限
-install(FILES misc/delete_user.sh
-    DESTINATION bin/
-)
+# root dbus
+install(FILES misc/org.deepin.dde.TransactionProtect.conf
+    DESTINATION share/dbus-1/system.d/
+    )

@@ -1,11 +1,11 @@
 [Unit]
-Description=dde-guard
+Description=dde-transactionprotect
 After=dbus.service
 
 [Service]
 Type=dbus
-BusName=org.deepin.dde.Guard
-ExecStart=/usr/bin/dde-guard
+BusName=org.deepin.dde.TransactionProtect
+ExecStart=/usr/bin/dde-transactionprotect
 StandardOutput=syslog
 Restart=always
 RestartSec=3
